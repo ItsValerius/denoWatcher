@@ -24,21 +24,19 @@ try {
 
 
 
-const watcher = Deno.watchFs("./");
+const watcher = Deno.watchFs("./", { recursive: false });
 
 for await (const event of watcher) {
     console.log(">>>> event", event);
     console.log(event.paths);
-    for (const path of event.paths) {
-        if (event.kind === "access") {
+    if (event.kind === "access") {
+        for (const path of event.paths) {
             const xml = parse(await Deno.open(path));
             console.log(xml);
-            db.create("alert", xml.alert)
+            db.create("alerts", xml.alert)
         }
+
     }
-
-
-
     console.log(new Date());
 }
 
