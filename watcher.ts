@@ -30,7 +30,7 @@ for await (const event of watcher) {
     console.log(">>>> event", event);
     console.log(event.paths);
     for (const path of event.paths) {
-        if (event.kind === "create") {
+        if (event.kind === "access") {
             const xml = parse(await Deno.open(path));
             console.log(xml);
             db.create("alert", xml.alert)
